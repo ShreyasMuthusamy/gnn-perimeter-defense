@@ -1,6 +1,8 @@
+import os
+import pathlib
 import traceback
-import gymnasium as gym
-from typing import Optional, Tuple
+import networkx as nx
+import gamms
 
 from lib.core.core import *
 from lib.utils.file_utils import get_directories, export_graph_config
@@ -8,116 +10,7 @@ from lib.utils.config_utils import load_configuration, load_config_metadata, cre
 from lib.utils.sensor_utils import create_static_sensors
 from lib.utils.game_utils import *
 import lib.core.time_logger as TLOG
-
-
-class LeagueEnv(gym.Env):
-    def __init__(
-            self,
-            config_name: str,
-            root_dir: str,
-            logger: Optional[TLOG.TimeLogger] = None,
-            debug: bool = True,
-    ):
-        self.time_counter = 0
-        self.payoff = 0
-        self.total_tags = 0
-        self.total_captures = 0
-
-        self.config_name = config_name
-        self.root_dir = root_dir
-        self.debug = debug
-        self.ctx = None
-
-        self.logger = logger
-        self.initial_step_log = None
-
-        self.max_time = None
-        self.flag_positions = None
-        self.flag_weights = None
-        self.attacker_count = 0
-        self.defender_count = 0
-
-        self.reset()
-
-    def _done(self) -> bool:
-        return check_termination(
-            self.time_counter,
-            self.max_time,
-            self.attacker_count,
-            self.defender_count
-        )
-    
-    def reset(self):
-        dirs = get_directories(self.root_dir)
-        config = load_configuration(self.config_name, dirs, self.debug)
-        success("Loaded configuration successfully", self.debug)
-
-        G = export_graph_config(config, dirs, self.debug)
-
-        # Create static sensor definitions once
-        static_sensors = create_static_sensors()
-
-        # Create a new context with sensors for this run
-        self.ctx = create_context_with_sensors(
-            config,
-            G,
-            visualization=False,
-            static_sensors=static_sensors,
-            debug=self.debug,
-        )
-
-        # Initialize agents and assign strategies
-        agent_config, agent_params_dict = initialize_agents(self.ctx, config)
-        success("Initialized agents successfully", self.debug)
-
-        # Configure visualization and initialize flags
-        configure_visualization(self.ctx, agent_config, config)
-        initialize_flags(self.ctx, config)
-
-        # Retrieve game parameters
-        self.max_time = config.get("game", {}).get("max_time", 1000)
-        self.flag_positions = config.get("game", {}).get("flag", {}).get("positions", [])
-        self.flag_weights = config.get("game", {}).get("flag", {}).get("weights")
-        interaction_config = config.get("game", {}).get("interaction", {})
-        payoff_config = config.get("game", {}).get("payoff", {})
-
-        # Initialize the time logger
-        metadata = load_config_metadata(config)
-        if self.logger is not None:
-            current_metadata = self.logger.get_metadata()
-            merged_metadata = {**current_metadata, **metadata}
-            self.logger.set_metadata(merged_metadata)
-        success("Initialized time logger", self.debug)
-
-        success(f"Starting game with max time: {self.max_time}", self.debug)
-
-        # Check initial interactions before any moves
-        (init_caps, init_tags, self.attacker_count,
-         self.defender_count, init_cap_details, init_tag_details) = check_agent_interaction(
-            self.ctx,
-            G,
-            agent_params_dict,
-            self.flag_positions,
-            interaction_config,
-            self.time_counter
-        )
-        self.total_captures += init_caps
-        self.total_tags += init_tags
-        self.payoff += compute_payoff(payoff_config, init_caps, init_tags)
-
-        # Log initial state
-        self.initial_step_log = {
-            "agents": {agent.name: agent.get_state().get("curr_pos") for agent in self.ctx.agent.create_iter()},
-            "flag_positions": self.flag_positions,
-            "payoff": self.payoff,
-            "captures": init_caps,
-            "tags": init_tags,
-            "tag_details": init_tag_details,
-            "capture_details": init_cap_details,
-        }
-        if self.logger is not None:
-            self.logger.log_data(self.initial_step_log, self.time_counter)
-
+from typing import Optional, Tuple
 
 
 # --- Main Game Runner ---
@@ -286,3 +179,33 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
             else:
                 logger.finalize(payoff=payoff, time=time_counter, total_captures=total_captures, total_tags=total_tags)
         success("Game completed", debug)
+
+
+if __name__ == "__main__":
+    current_path = pathlib.Path(__file__).resolve()
+    root_path = current_path.parent
+    print("Current path:", current_path)
+    print("Root path:", root_path)
+
+    import policies.attacker.V1R1_MSU_Atk as attacker
+    import policies.defender.V1R1_UNCC_Def as defender
+
+    RESULT_PATH = os.path.join(root_path, "data/result")
+    atk_name = attacker.__name__.split(".")[-1] 
+    def_name = defender.__name__.split(".")[-1] 
+
+    print(atk_name, def_name) 
+    logger = TLOG.TimeLogger("test", path=RESULT_PATH)
+    logger.set_metadata(
+        {
+            "attacker": atk_name,
+            "defender": def_name,
+        }
+    )
+
+    # Example of using the updated runner with the new file structure
+    # You can now specify just the filename and it will be found automatically
+    final_payoff, game_time, _, _ = run_game("F5A10D10_a43e34_r02.yml", root_dir=str(root_path), attacker_strategy=attacker, defender_strategy=defender, logger=logger, visualization=True, debug=True)  # This will be found in the nested folders
+
+    logger.write_to_file("F5A10D10_ds3k.json")
+    print("Final payoff:", final_payoff)
