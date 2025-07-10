@@ -29,7 +29,7 @@ def main():
     loader = DataLoader(set)
 
     trainer.fit(model, train_dataloaders=loader)
-    torch.save(model, './models/test.ckpt')
+    torch.save(model, './models/test.pt')
 
 if __name__ == '__main__':
     main()

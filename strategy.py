@@ -3,10 +3,14 @@ import networkx as nx
 import numpy as np
 import torch
 
-from game.lib.utils.sensor_utils import extract_sensor_data, extract_neighbor_sensor_data
-from utils.dataset import postprocess_action
+from lib.utils.sensor_utils import extract_sensor_data, extract_neighbor_sensor_data
 
-model = torch.load('./models/test.ckpt')
+model = torch.load('policies/models/test.pt', weights_only=False)
+
+def postprocess_action(action):
+        action = np.round(action)
+        action = np.clip(action, 0, 199)
+        return action
 
 def strategy(state):
     """
@@ -26,11 +30,11 @@ def strategy(state):
     )
 
     S = np.concat((
-        np.array(flag_positions),
-        np.array(attacker_positions),
-        np.array(defender_positions),
+        np.pad(np.array(flag_positions), (0, 5 - len(flag_positions)), constant_values=-1),
+        np.pad(np.array(attacker_positions), (0, 10 - len(attacker_positions)), constant_values=-1),
+        np.pad(np.array(defender_positions), (0, 10 - len(defender_positions)), constant_values=-1),
     ))
-    node_pred = model.forward(torch.tensor(S, dtype=torch.float))
+    node_pred = model.ac.actor.forward(torch.tensor(S, dtype=torch.float)).detach()
     node_pred = int(postprocess_action(node_pred)[0])
 
     try:

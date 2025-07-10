@@ -68,8 +68,3 @@ def get_data(graph: str, att_strat: Optional[str] = None, def_strat: Optional[st
             replays.append(to_numpy(data))
 
     return np.concat(replays, axis=0)
-
-def postprocess_action(action):
-        action = np.round(action)
-        action = np.clip(action, 0, 199)
-        return action

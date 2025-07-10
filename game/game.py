@@ -187,8 +187,8 @@ if __name__ == "__main__":
     print("Current path:", current_path)
     print("Root path:", root_path)
 
-    import policies.attacker.V1R1_MSU_Atk as attacker
-    import policies.defender.V1R1_UNCC_Def as defender
+    import policies.attacker.strategy as attacker
+    import policies.defender.strategy as defender
 
     RESULT_PATH = os.path.join(root_path, "data/result")
     atk_name = attacker.__name__.split(".")[-1] 
@@ -205,7 +205,7 @@ if __name__ == "__main__":
 
     # Example of using the updated runner with the new file structure
     # You can now specify just the filename and it will be found automatically
-    final_payoff, game_time, _, _ = run_game("F5A10D10_a43e34_r02.yml", root_dir=str(root_path), attacker_strategy=attacker, defender_strategy=defender, logger=logger, visualization=True, debug=True)  # This will be found in the nested folders
+    final_payoff, game_time, _, _ = run_game("F5A10D10_0ac5d2_r02.yml", root_dir=str(root_path), attacker_strategy=attacker, defender_strategy=defender, logger=logger, visualization=True, debug=True)  # This will be found in the nested folders
 
     logger.write_to_file("F5A10D10_ds3k.json")
     print("Final payoff:", final_payoff)
