@@ -10,7 +10,6 @@ from torch_geometric.data.data import BaseData
 from torch_geometric.loader import DataLoader
 from torch_geometric.utils.convert import from_scipy_sparse_matrix
 
-from game.game import LeagueEnv
 from utils.rl import ExperienceSourceDataset
 from architecture.rl import GNNActorCritic
 
@@ -32,12 +31,6 @@ class LeagueActorCritic(pl.LightningModule):
         gamma=0.99,
         lam=0.9,
         polyak=0.995,
-        max_steps=200,
-        n_agents: int = 100,
-        width: float = 10.0,
-        agent_radius: float = 0.05,
-        agent_margin: float = 0.05,
-        scenario: str = "uniform",
         **kwargs,
     ):
         super().__init__()
@@ -50,17 +43,7 @@ class LeagueActorCritic(pl.LightningModule):
         self.gamma = gamma
         self.lam = lam
         self.polyak = polyak
-        self.max_steps = max_steps
         self.dropout = dropout
-        self.agent_radius = agent_radius
-        self.agent_margin = agent_margin
-
-        self.env = LeagueEnv(
-            n_agents=n_agents,
-            width=width,
-            scenario=scenario,
-            agent_radius=agent_radius + agent_margin,
-        )
 
         self.ac = GNNActorCritic(
             self.env.observation_ndim,

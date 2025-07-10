@@ -3,6 +3,7 @@ __pycache__/
 
 # Data files and other university policies (available in League code)
 data/
+sample_data/
 policies/
 
 # Environments
