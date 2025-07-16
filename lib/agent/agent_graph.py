@@ -276,5 +276,5 @@ if __name__ == "__main__":
         # print(ag)
 
     except NameError as e:
-        print(f"Error in demo: {e}")
-        print("This error is intentional to demonstrate error handling.")
+        # print(f"Error in demo: {e}")
+        # print("This error is intentional to demonstrate error handling.")
