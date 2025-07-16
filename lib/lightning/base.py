@@ -1,15 +1,11 @@
 from typing import Iterator, List, Union
 from pathlib import Path
 
-import numpy as np
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-from torch_geometric.data import Batch, Data
 from torch_geometric.data.data import BaseData
 from torch_geometric.loader import DataLoader
-from torch_geometric.utils.convert import from_scipy_sparse_matrix
 
 import lib.core.time_logger as TLOG
 from lib.utils.rl import ExperienceSourceDataset
@@ -76,7 +72,7 @@ class LeagueActorCritic(pl.LightningModule):
     @torch.no_grad()
     def rollout(self) -> List[BaseData]:
         current_path = Path(__file__).resolve()
-        root_path = current_path.parent
+        root_path = current_path.parent.parent.parent # base.py file is in root/lib/lightning
 
         self.rollout_start()
         
