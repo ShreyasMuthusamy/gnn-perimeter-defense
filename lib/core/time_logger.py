@@ -3,6 +3,13 @@ import hashlib
 import json
 import time
 import os
+import networkx as nx
+
+import numpy as np
+import torch
+from torch_geometric.data import Data
+from torch_geometric.data.data import BaseData
+from torch_geometric.utils.convert import from_scipy_sparse_matrix
 
 try:
     from core import *
@@ -104,6 +111,43 @@ class TimeLogger:
             data_loaded = json.load(f)
             self.metadata = data_loaded.get("metadata", {})
             self.records = data_loaded.get("records", [])
+    
+    def to_data(self, graph: nx.MultiDiGraph, dtype: torch.dtype, device: torch.device) -> List[BaseData]:
+        game = []
+
+        A = nx.adjacency_matrix(graph)
+        edge_index, edge_weight = from_scipy_sparse_matrix(A)
+        edge_index = edge_index.to(dtype=torch.long, device=device)
+        edge_weight = edge_weight.to(dtype=dtype, device=device)
+
+        for i in range(len(self.records) - 1):
+            curr_record = self.records[i]
+            next_record = self.records[i+1]
+
+            state = np.zeros((graph.number_of_nodes(), 3))
+            state[[node for (name, node) in curr_record['agents'].items() if 'attacker_' in name], 0] = 1
+            state[[node for (name, node) in curr_record['agents'].items() if 'defender_' in name], 0] = 1
+            state[record['flag_positions'], 2] = 1
+            state = torch.from_numpy(state).to(dtype=dtype, device=device)
+
+            action = np.zeros((graph.number_of_nodes(), 1))
+            action[[node for (name, node) in next_record['agents'].items() if 'attacker_' in name], 0] = 1
+            action = torch.from_numpy(action).to(dtype=dtype, device=device)
+
+            payoff = torch.tensor([next_record['payoff']]).to(dtype=dtype, device=device)
+
+            game.append(
+                Data(
+                    state=state,
+                    action=action,
+                    edge_index=edge_index,
+                    edge_attr=edge_weight,
+                    num_nodes=graph.number_of_nodes(),
+                    payoff=payoff,
+                )
+            )
+        
+        return game
 
     def extract_by_time(self, time_min: float, time_max: float) -> List[Dict[str, Any]]:
         """

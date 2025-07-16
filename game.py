@@ -14,7 +14,7 @@ from typing import Optional, Tuple
 
 
 # --- Main Game Runner ---
-def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strategy, logger: Optional[TLOG.TimeLogger] = None, visualization: bool = False, debug: bool = False) -> Tuple[float, int, int, int]:
+def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strategy, logger: Optional[TLOG.TimeLogger] = None, visualization: bool = False, debug: bool = False) -> Tuple[nx.MultiDiGraph, float, int, int, int]:
     """
     Runs the multi-agent game using the provided configuration.
 
@@ -28,7 +28,7 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
         debug: Whether to print debug messages
 
     Returns:
-        tuple: (final_payoff, time, total_captures, total_tags)
+        tuple: (G, final_payoff, time, total_captures, total_tags)
     """
     # Initialize variables outside the try to ensure they exist in finally block
     time_counter = 0
@@ -158,7 +158,7 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
                 success(f"Game terminated at time {time_counter}", debug)
                 break
 
-        return payoff, time_counter, total_captures, total_tags
+        return G, payoff, time_counter, total_captures, total_tags
 
     except KeyboardInterrupt:
         warning("Game interrupted by user.")
@@ -187,8 +187,8 @@ if __name__ == "__main__":
     print("Current path:", current_path)
     print("Root path:", root_path)
 
-    import policies.attacker.strategy as attacker
-    import policies.defender.strategy as defender
+    import policies.attacker.V1R1_MSU_Atk as attacker
+    import policies.defender.V1R1_MSU_Def as defender
 
     RESULT_PATH = os.path.join(root_path, "data/result")
     atk_name = attacker.__name__.split(".")[-1] 
