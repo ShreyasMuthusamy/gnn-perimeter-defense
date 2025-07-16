@@ -59,11 +59,11 @@ def cast_to_multidigraph(G: nx.DiGraph, debug: Optional[bool] = False) -> nx.Mul
             MD.add_edge(v, u, **existing_data)
             next_edge_id += 1
 
-    info(f"Added {added_reverse_count} reverse edge(s) to ensure bidirectionality.", debug)
-    success(
-        f"Converted DiGraph to MultiDiGraph with {MD.number_of_nodes()} nodes and {MD.number_of_edges()} edges.",
-        debug
-    )
+    # info(f"Added {added_reverse_count} reverse edge(s) to ensure bidirectionality.", debug)
+    # success(
+    #     f"Converted DiGraph to MultiDiGraph with {MD.number_of_nodes()} nodes and {MD.number_of_edges()} edges.",
+    #     debug
+    # )
     return MD
 
 
@@ -113,7 +113,7 @@ def convert_gml_to_multidigraph(G: nx.Graph, scale_factor: float = 1, offset_x: 
         error(f"Error converting gml to spatial DiGraph: {e}")
         raise Exception(f"Error converting to gml spatial DiGraph: {e}")
 
-    success(f"Converted to spatial DiGraph with {spatial_graph.number_of_nodes()} nodes and {spatial_graph.number_of_edges()} edges", debug)
+    # success(f"Converted to spatial DiGraph with {spatial_graph.number_of_nodes()} nodes and {spatial_graph.number_of_edges()} edges", debug)
 
     # Convert to MultiDiGraph with bidirectional edges
     return cast_to_multidigraph(spatial_graph, debug)
@@ -152,7 +152,7 @@ def generate_simple_grid(rows: int = 10, cols: int = 10, debug: bool = False) ->
 
     # Convert the undirected grid graph to a directed multigraph.
     G_multi = nx.MultiDiGraph(G)
-    success(f"Generated grid with {G_multi.number_of_nodes()} nodes and {G_multi.number_of_edges()} edges.", debug)
+    # success(f"Generated grid with {G_multi.number_of_nodes()} nodes and {G_multi.number_of_edges()} edges.", debug)
     return G_multi
 
 
@@ -195,7 +195,7 @@ def generate_lattice_grid(rows: int = 10, cols: int = 10, debug: bool = False) -
     # Convert to a directed multigraph
     G_multi = nx.MultiDiGraph(G)
 
-    success(f"Generated lattice grid with {G_multi.number_of_nodes()} nodes " f"and {G_multi.number_of_edges()} edges.", debug)
+    # success(f"Generated lattice grid with {G_multi.number_of_nodes()} nodes " f"and {G_multi.number_of_edges()} edges.", debug)
 
     return G_multi
 
@@ -250,7 +250,7 @@ def generate_triangular_lattice_graph(rows: int = 10, cols: int = 10, debug: boo
     # Convert to MultiDiGraph
     G_multi = nx.MultiDiGraph(G)
 
-    success(f"Generated triangular lattice with {G_multi.number_of_nodes()} nodes " f"and {G_multi.number_of_edges()} edges.", debug)
+    # success(f"Generated triangular lattice with {G_multi.number_of_nodes()} nodes " f"and {G_multi.number_of_edges()} edges.", debug)
 
     return G_multi
 
@@ -293,7 +293,7 @@ def generate_random_delaunay_graph(n_points: int = 100, side: float = 1.0, seed:
     # 5) Convert to MultiDiGraph
     G_multi = nx.MultiDiGraph(G)
 
-    success(f"Generated Delaunay triangulation with {G_multi.number_of_nodes()} nodes, " f"{G_multi.number_of_edges()} edges.", debug)
+    # success(f"Generated Delaunay triangulation with {G_multi.number_of_nodes()} nodes, " f"{G_multi.number_of_edges()} edges.", debug)
 
     return G_multi
 
@@ -334,7 +334,7 @@ def renumber_graph(G: nx.MultiDiGraph, debug: bool = False) -> nx.MultiDiGraph:
                 edge_data["id"] = edge_id
                 edge_id += 1
             H.add_edge(new_u, new_v, **edge_data)
-        success(f"Graph renumbered with {len(H.nodes)} nodes.", debug)
+        # success(f"Graph renumbered with {len(H.nodes)} nodes.", debug)
         return H
 
     except Exception as e:
@@ -366,16 +366,16 @@ def reduce_graph_to_size(G: nx.MultiDiGraph, node_limit: int, debug: bool = Fals
     try:
         # If the graph is already small enough, renumber and return it.
         if G.number_of_nodes() <= node_limit:
-            info(f"Graph has {G.number_of_nodes()} nodes which is within the limit.", debug)
+            # info(f"Graph has {G.number_of_nodes()} nodes which is within the limit.", debug)
             return renumber_graph(G)
 
         # Identify the largest weakly connected component in the MultiDiGraph.
         largest_cc = max(nx.weakly_connected_components(G), key=len)
-        info(f"Largest weakly connected component has {len(largest_cc)} nodes.", debug)
+        # info(f"Largest weakly connected component has {len(largest_cc)} nodes.", debug)
 
         if len(largest_cc) <= node_limit:
             sub_G = G.subgraph(largest_cc).copy()
-            info(f"Using largest component as it is within the node limit.", debug)
+            # info(f"Using largest component as it is within the node limit.", debug)
             return renumber_graph(sub_G)
 
         # Otherwise, perform a BFS from a random node in the largest component.
@@ -391,7 +391,7 @@ def reduce_graph_to_size(G: nx.MultiDiGraph, node_limit: int, debug: bool = Fals
                 if neighbor not in subgraph_nodes:
                     subgraph_nodes.add(neighbor)
                     frontier.append(neighbor)
-                    info(f"Added node {neighbor}. Current subgraph size: {len(subgraph_nodes)}", debug)
+                    # info(f"Added node {neighbor}. Current subgraph size: {len(subgraph_nodes)}", debug)
                     if len(subgraph_nodes) >= node_limit:
                         break
 
@@ -400,7 +400,7 @@ def reduce_graph_to_size(G: nx.MultiDiGraph, node_limit: int, debug: bool = Fals
 
         sub_G = G.subgraph(subgraph_nodes).copy()
         reduced_graph = renumber_graph(sub_G)
-        success(f"Graph reduced and renumbered to {reduced_graph.number_of_nodes()} nodes.", debug)
+        # success(f"Graph reduced and renumbered to {reduced_graph.number_of_nodes()} nodes.", debug)
         return reduced_graph
 
     except Exception as e:

@@ -494,12 +494,12 @@ def test_distributions():
     ]
 
     # Run tests and print results
-    print("=== Node Distribution Tests ===")
+    # print("=== Node Distribution Tests ===")
 
     for graph_name, graph in graphs.items():
         center = center_nodes[graph_name]
-        print(f"\nGraph: {graph_name} (Nodes: {graph.number_of_nodes()}, Edges: {graph.number_of_edges()})")
-        print(f"Center Node: {center}")
+        # print(f"\nGraph: {graph_name} (Nodes: {graph.number_of_nodes()}, Edges: {graph.number_of_edges()})")
+        # print(f"Center Node: {center}")
 
         # Get distance distribution for reference
         distances = nx.single_source_shortest_path_length(graph, center)
@@ -507,11 +507,11 @@ def test_distributions():
         for node, dist in distances.items():
             distance_counts[dist] = distance_counts.get(dist, 0) + 1
 
-        print("Distance distribution from center:")
-        for dist in sorted(distance_counts.keys()):
-            print(f"  Distance {dist}: {distance_counts[dist]} nodes")
+        # print("Distance distribution from center:")
+        # for dist in sorted(distance_counts.keys()):
+        #     print(f"  Distance {dist}: {distance_counts[dist]} nodes")
 
-        print("\nTesting distributions:")
+        # print("\nTesting distributions:")
         for dist_name, dist_func in distributions:
             selected = dist_func(graph, center, num_nodes_to_select)
 
@@ -524,9 +524,9 @@ def test_distributions():
             # Format as readable string
             dist_str = ", ".join([f"d={d}:{count}" for d, count in sorted(dist_summary.items())])
 
-            print(f"  {dist_name}: Selected {len(selected)} nodes - {dist_str}")
+            # print(f"  {dist_name}: Selected {len(selected)} nodes - {dist_str}")
 
-    print("\nTests completed.")
+    # print("\nTests completed.")
 
 
 if __name__ == "__main__":

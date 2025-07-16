@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "/home/muthurak/gnn-perimeter-defense/main.py", line 184, in <module>
+    main()
+  File "/home/muthurak/gnn-perimeter-defense/main.py", line 63, in main
+    imitation(params)
+  File "/home/muthurak/gnn-perimeter-defense/main.py", line 168, in imitation
+    trainer = make_trainer(params)
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/gnn-perimeter-defense/main.py", line 124, in make_trainer
+    run.log_code(
+  File "/home/muthurak/gnn-perimeter-defense/.env/lib/python3.11/site-packages/wandb/sdk/wandb_run.py", line 456, in wrapper_fn
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/gnn-perimeter-defense/.env/lib/python3.11/site-packages/wandb/sdk/wandb_run.py", line 398, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/gnn-perimeter-defense/.env/lib/python3.11/site-packages/wandb/sdk/wandb_run.py", line 443, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/gnn-perimeter-defense/.env/lib/python3.11/site-packages/wandb/sdk/wandb_run.py", line 1136, in log_code
+    for file_path in filenames.filtered_dir(root, include_fn, exclude_fn):
+  File "/home/muthurak/gnn-perimeter-defense/.env/lib/python3.11/site-packages/wandb/sdk/lib/filenames.py", line 56, in filtered_dir
+    if _include_fn(file_path, root) and not _exclude_fn(file_path, root):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/gnn-perimeter-defense/.env/lib/python3.11/site-packages/wandb/sdk/lib/filenames.py", line 42, in _include_fn
+    if len(inspect.signature(include_fn).parameters) == 2
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/.pyenv/versions/3.11.8/lib/python3.11/inspect.py", line 3280, in signature
+    return Signature.from_callable(obj, follow_wrapped=follow_wrapped,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/.pyenv/versions/3.11.8/lib/python3.11/inspect.py", line 3028, in from_callable
+    return _signature_from_callable(obj, sigcls=cls,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/.pyenv/versions/3.11.8/lib/python3.11/inspect.py", line 2516, in _signature_from_callable
+    return _signature_from_function(sigcls, obj,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/.pyenv/versions/3.11.8/lib/python3.11/inspect.py", line 2378, in _signature_from_function
+    parameters.append(Parameter(name, annotation=annotation,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/muthurak/.pyenv/versions/3.11.8/lib/python3.11/inspect.py", line 2686, in __init__
+    def __init__(self, name, kind, *, default=_empty, annotation=_empty):
+
+KeyboardInterrupt

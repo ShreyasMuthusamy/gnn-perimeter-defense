@@ -41,7 +41,7 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
     try:
         dirs = get_directories(root_dir)
         config = load_configuration(config_name, dirs, debug)
-        success("Loaded configuration successfully", debug)
+        # success("Loaded configuration successfully", debug)
 
         G = export_graph_config(config, dirs, debug)
 
@@ -54,7 +54,7 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
         # Initialize agents and assign strategies
         agent_config, agent_params_dict = initialize_agents(ctx, config)
         assign_strategies(ctx, agent_config, attacker_strategy, defender_strategy)
-        success("Assigned strategies successfully", debug)
+        # success("Assigned strategies successfully", debug)
 
         # Configure visualization and initialize flags
         configure_visualization(ctx, agent_config, config)
@@ -73,9 +73,9 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
             current_metadata = logger.get_metadata()
             merged_metadata = {**current_metadata, **metadata}
             logger.set_metadata(merged_metadata)
-        success("Initialized time logger", debug)
+        # success("Initialized time logger", debug)
 
-        success(f"Starting game with max time: {max_time}", debug)
+        # success(f"Starting game with max time: {max_time}", debug)
 
         # Check initial interactions before any moves
         init_caps, init_tags, attacker_count, defender_count, init_cap_details, init_tag_details = check_agent_interaction(ctx, G, agent_params_dict, flag_positions, interaction_config, time_counter)
@@ -98,7 +98,7 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
 
         # Check if game should terminate after initial state
         if check_termination(time_counter, max_time, attacker_count, defender_count):
-            success(f"Game terminated at time {time_counter}", debug)
+            # success(f"Game terminated at time {time_counter}", debug)
             return payoff, time_counter, total_captures, total_tags
 
         # Main game loop
@@ -155,7 +155,7 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
                 logger.log_data(step_log, time_counter)
 
             if check_termination(time_counter, max_time, attacker_count, defender_count):
-                success(f"Game terminated at time {time_counter}", debug)
+                # success(f"Game terminated at time {time_counter}", debug)
                 break
 
         return G, payoff, time_counter, total_captures, total_tags
@@ -178,7 +178,7 @@ def run_game(config_name: str, root_dir: str, attacker_strategy, defender_strate
                 logger.finalize(payoff=payoff, time=time_counter, total_captures=total_captures, total_tags=total_tags, error=error_message)
             else:
                 logger.finalize(payoff=payoff, time=time_counter, total_captures=total_captures, total_tags=total_tags)
-        success("Game completed", debug)
+        # success("Game completed", debug)
 
 
 if __name__ == "__main__":
@@ -188,7 +188,7 @@ if __name__ == "__main__":
     print("Root path:", root_path)
 
     import policies.attacker.V1R1_MSU_Atk as attacker
-    import policies.defender.V1R1_MSU_Def as defender
+    import policies.defender.V1R2_GMU_Def as defender
 
     RESULT_PATH = os.path.join(root_path, "data/result")
     atk_name = attacker.__name__.split(".")[-1] 
@@ -205,7 +205,7 @@ if __name__ == "__main__":
 
     # Example of using the updated runner with the new file structure
     # You can now specify just the filename and it will be found automatically
-    final_payoff, game_time, _, _ = run_game("F5A10D10_0ac5d2_r02.yml", root_dir=str(root_path), attacker_strategy=attacker, defender_strategy=defender, logger=logger, visualization=True, debug=True)  # This will be found in the nested folders
+    _, final_payoff, game_time, _, _ = run_game("F5A10D10_0ac5d2_r02.yml", root_dir=str(root_path), attacker_strategy=attacker, defender_strategy=defender, logger=logger, visualization=True, debug=True)  # This will be found in the nested folders
 
-    logger.write_to_file("F5A10D10_ds3k.json")
+    # logger.write_to_file("F5A10D10_ds3k.json")
     print("Final payoff:", final_payoff)

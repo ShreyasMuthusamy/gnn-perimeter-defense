@@ -120,14 +120,14 @@ class TimeLogger:
         edge_index = edge_index.to(dtype=torch.long, device=device)
         edge_weight = edge_weight.to(dtype=dtype, device=device)
 
-        for i in range(len(self.records) - 1):
+        for i in range(len(self.records) - 2):      # Ignore summary dictionary
             curr_record = self.records[i]
             next_record = self.records[i+1]
 
             state = np.zeros((graph.number_of_nodes(), 3))
             state[[node for (name, node) in curr_record['agents'].items() if 'attacker_' in name], 0] = 1
             state[[node for (name, node) in curr_record['agents'].items() if 'defender_' in name], 0] = 1
-            state[record['flag_positions'], 2] = 1
+            state[curr_record['flag_positions'], 2] = 1
             state = torch.from_numpy(state).to(dtype=dtype, device=device)
 
             action = np.zeros((graph.number_of_nodes(), 1))

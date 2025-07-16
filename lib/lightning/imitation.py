@@ -1,3 +1,5 @@
+import inspect
+
 import torch.nn.functional as F
 from torch_geometric.data.data import BaseData
 
@@ -6,10 +8,6 @@ from lib.utils.rl import ReplayBuffer
 
 
 class LeagueImitation(LeagueActorCritic):
-    # @classmethod
-    # def add_model_specific_args(cls, group):
-    #     return add_model_specific_args(cls, group)
-
     def __init__(
         self,
         buffer_size: int = 100_000,
@@ -85,5 +83,5 @@ class LeagueImitation(LeagueActorCritic):
 
     def test_dataloader(self):
         return self._dataloader(
-            n_episodes=100, use_buffer=False, training=False
+            n_episodes=10, use_buffer=False, training=False
         )

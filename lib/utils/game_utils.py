@@ -110,7 +110,7 @@ def initialize_agents(ctx: Any, config: Dict[str, Any]) -> Tuple[Dict[str, Dict[
     for name, config in agent_config.items():
         ctx.agent.create_agent(name, **config)
 
-    success(f"Created {len(attacker_entries)} attackers and {len(defender_memories)} defenders.")
+    # success(f"Created {len(attacker_entries)} attackers and {len(defender_memories)} defenders.")
     ctx.sensor.get_sensor("agent").set_owner(None)
     return agent_config, agent_params_dict
 
@@ -215,7 +215,7 @@ def configure_visualization(ctx: Any, agent_config: Dict[str, Dict[str, Any]], c
         # Apply visual settings to the agent
         ctx.visual.set_agent_visual(name, color=color, size=size)
 
-    success("Visualization configured.")
+    # success("Visualization configured.")
 
 
 def initialize_flags(ctx: Any, config: Dict[str, Any], debug: Optional[bool] = False) -> None:
@@ -256,7 +256,8 @@ def initialize_flags(ctx: Any, config: Dict[str, Any], debug: Optional[bool] = F
             flag_color = color_map[flag_color.lower()]
     except ImportError:
         if debug:
-            info("Color enum not available, using provided color values", debug)
+            # info("Color enum not available, using provided color values", debug)
+            pass
 
     # Create a flag for each position
     for idx, node_id in enumerate(flag_positions):
@@ -273,7 +274,7 @@ def initialize_flags(ctx: Any, config: Dict[str, Any], debug: Optional[bool] = F
                 artist.data.update({"x": node.x, "y": node.y, "radius": flag_size, "color": flag_color})
                 ctx.visual.add_artist(f"flag_{idx}", artist)
 
-                info(f"Flag {idx} created at node {node_id} using Artist API", debug)
+                # info(f"Flag {idx} created at node {node_id} using Artist API", debug)
 
             # Fallback for older versions or if Artist import fails
             except (ImportError, AttributeError):
@@ -281,12 +282,12 @@ def initialize_flags(ctx: Any, config: Dict[str, Any], debug: Optional[bool] = F
                 data = {"x": node.x, "y": node.y, "radius": flag_size, "color": flag_color, "layer": 20}  # Use radius instead of scale for better compatibility  # Set layer explicitly
                 ctx.visual.add_artist(f"flag_{idx}", data)
 
-                info(f"Flag {idx} created at node {node_id} using dictionary API", debug)
+                # info(f"Flag {idx} created at node {node_id} using dictionary API", debug)
 
         except Exception as e:
             error(f"Failed to create flag {idx} at node {node_id}: {str(e)}")
 
-    success(f"Successfully initialized {len(flag_positions)} flags", debug)
+    # success(f"Successfully initialized {len(flag_positions)} flags", debug)
 
 
 def handle_interaction(ctx: Any, agent: Any, action: str, processed: Set[str], agent_params: Dict[str, Any], debug: Optional[bool] = False) -> bool:
@@ -338,7 +339,7 @@ def handle_interaction(ctx: Any, agent: Any, action: str, processed: Set[str], a
 
             # 5. Delete agent from engine
             ctx.agent.delete_agent(agent.name)  # Writes AGENT_DELETE and pops agent :contentReference[oaicite:10]{index=10}
-            info(f"Agent '{agent.name}' fully removed", debug)
+            # info(f"Agent '{agent.name}' fully removed", debug)
             return True
 
         except Exception as e:
@@ -382,7 +383,7 @@ def check_agent_interaction(
                     shortest_distance = nx.shortest_path_length(G, attacker.current_node_id, flag)
                     attacker_capture_radius = getattr(agent_params[attacker.name], "capture_radius", 0)
                     if shortest_distance <= attacker_capture_radius:
-                        info(f"Attacker {attacker.name} captured flag {flag} at time {time}")
+                        # info(f"Attacker {attacker.name} captured flag {flag} at time {time}")
                         # Store attacker name for capture details before potential deletion
                         attacker_name = attacker.name
                         if handle_interaction(ctx, attacker, interaction_config["capture"], processed, agent_params, debug):
@@ -407,7 +408,7 @@ def check_agent_interaction(
                 shortest_distance = nx.shortest_path_length(G, attacker.current_node_id, defender.current_node_id)
 
                 if shortest_distance <= defender_capture_radius:
-                    info(f"Defender {defender.name} tagged attacker {attacker.name} at time {time}")
+                    # info(f"Defender {defender.name} tagged attacker {attacker.name} at time {time}")
                     defender_name = defender.name
                     attacker_name = attacker.name
 
@@ -441,7 +442,7 @@ def check_agent_interaction(
                     shortest_distance = nx.shortest_path_length(G, attacker.current_node_id, flag)
                     attacker_capture_radius = getattr(agent_params[attacker.name], "capture_radius", 0)
                     if shortest_distance <= attacker_capture_radius:
-                        info(f"Attacker {attacker.name} captured flag {flag} at time {time}")
+                        # info(f"Attacker {attacker.name} captured flag {flag} at time {time}")
                         # Store attacker name before potential deletion
                         attacker_name = attacker.name
                         if handle_interaction(ctx, attacker, interaction_config["capture"], processed, agent_params, debug):
@@ -473,13 +474,13 @@ def check_termination(time: int, MAX_TIME: int, remaining_attackers: int, remain
         bool: True if termination condition is met, False otherwise.
     """
     if time >= MAX_TIME:
-        success("Maximum time reached.")
+        # success("Maximum time reached.")
         return True
     if remaining_attackers == 0:
-        success("All attackers have been eliminated.")
+        # success("All attackers have been eliminated.")
         return True
     if remaining_defenders == 0:
-        success("All defenders have been eliminated.")
+        # success("All defenders have been eliminated.")
         return True
     return False
 
@@ -574,19 +575,19 @@ def check_and_install_dependencies() -> bool:
     for import_name, pip_name in required_packages.items():
         try:
             __import__(import_name)
-            success(f"✓ {import_name} is already installed")
+            # success(f"✓ {import_name} is already installed")
         except ImportError:
             warning(f"✗ {import_name} is not installed")
             missing_packages.append(pip_name)
 
     if missing_packages:
-        info("Installing missing packages...")
+        # info("Installing missing packages...")
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", "pip"])
             for package in missing_packages:
-                info(f"Installing {package}...")
+                # info(f"Installing {package}...")
                 subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-                success(f"✓ Successfully installed {package}")
+                # success(f"✓ Successfully installed {package}")
         except subprocess.CalledProcessError as e:
             error(f"Failed to install packages: {e}")
             warning("Please try installing the packages manually:\n" + "\n".join([f"pip install {pkg}" for pkg in missing_packages]))
@@ -595,5 +596,5 @@ def check_and_install_dependencies() -> bool:
             error(f"An unexpected error occurred: {e}")
             return False
 
-    success("All required dependencies are satisfied!")
+    # success("All required dependencies are satisfied!")
     return True

@@ -273,7 +273,7 @@ if __name__ == "__main__":
         ag.set_flag_positions(["A", "C"])
         ag.set_flag_weights([1.0, 2.0])
 
-        print(ag)
+        # print(ag)
 
     except NameError as e:
         print(f"Error in demo: {e}")

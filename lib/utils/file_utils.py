@@ -41,7 +41,7 @@ def read_yml_file(file_path: str, search_if_not_found: bool = True, config_dir: 
         try:
             with open(file_path, "r") as f:
                 config = yaml.safe_load(f)
-            success(f"Successfully loaded config from {file_path}")
+            # success(f"Successfully loaded config from {file_path}")
             return config
         except FileNotFoundError:
             # If file not found and search is enabled
@@ -72,14 +72,14 @@ def read_yml_file(file_path: str, search_if_not_found: bool = True, config_dir: 
                 for root, _, files in os.walk(search_root):
                     if file_name in files:
                         found_path = os.path.join(root, file_name)
-                        success(f"Found config file at: {found_path}")
+                        # success(f"Found config file at: {found_path}")
                         break
 
                 if found_path:
                     # Read the found file
                     with open(found_path, "r") as f:
                         config = yaml.safe_load(f)
-                    success(f"Successfully loaded config from {found_path}")
+                    # success(f"Successfully loaded config from {found_path}")
                     return config
 
                 # If we get here, we didn't find the file
@@ -134,7 +134,7 @@ def export_graph_config(config: dict, dirs: dict, debug: bool = False) -> nx.Mul
     G = export_graph_generic(graph_path)
     if not isinstance(G, nx.MultiDiGraph):
         warning(f"Graph {graph_name} is not a MultiDiGraph!")
-    success(f"Loaded graph: {graph_name}", debug)
+    # success(f"Loaded graph: {graph_name}", debug)
     return G
 
 
@@ -170,7 +170,7 @@ def export_graph_pkl(filename: str, debug: bool = False) -> nx.MultiDiGraph:
     # Ensure the graph is a MultiDiGraph
     if not isinstance(G, nx.MultiDiGraph):
         G = cast_to_multidigraph(G, debug)
-    success(f"Graph loaded from {filename} with {len(G.nodes)} nodes.", debug)
+    # success(f"Graph loaded from {filename} with {len(G.nodes)} nodes.", debug)
     return G
 
 
@@ -211,7 +211,7 @@ def export_all_graphs_pkl(path: str, debug: Optional[bool] = False) -> Union[boo
                 graph = pickle.load(f)
             # Assuming the graph has an attribute 'nodes' that returns a list or set of nodes.
             num_nodes = len(getattr(graph, "nodes", lambda: [])())
-            success(f"Graph loaded from {path} with {num_nodes} nodes.", debug)
+            # success(f"Graph loaded from {path} with {num_nodes} nodes.", debug)
             if not isinstance(graph, nx.MultiDiGraph):
                 warning(f"Graph {path} is not a MultiDiGraph.")
                 graph = cast_to_multidigraph(graph, debug)
@@ -232,7 +232,7 @@ def export_all_graphs_pkl(path: str, debug: Optional[bool] = False) -> Union[boo
                     with open(file_path, "rb") as f:
                         graph = pickle.load(f)
                     num_nodes = len(getattr(graph, "nodes", lambda: [])())
-                    success(f"Graph loaded from {file_path} with {num_nodes} nodes.", debug)
+                    # success(f"Graph loaded from {file_path} with {num_nodes} nodes.", debug)
                     if not isinstance(graph, nx.MultiDiGraph):
                         warning(f"Graph {file_path} is not a MultiGraph.")
                         graph = cast_to_multidigraph(graph, debug)
@@ -325,7 +325,7 @@ def export_graph_dsg(path: Union[str, Path], debug: bool = False) -> nx.MultiDiG
             raise Exception(f"Failed to cast Places graph to MultiDiGraph: {e}")
 
     # Log success
-    success(f"Exported DSG Places subgraph: {nx_places.number_of_nodes()} nodes, " f"{nx_places.number_of_edges()} edges.", debug)
+    # success(f"Exported DSG Places subgraph: {nx_places.number_of_nodes()} nodes, " f"{nx_places.number_of_edges()} edges.", debug)
 
     return nx_places
 
@@ -359,7 +359,7 @@ def export_graph_gml(filename: str, scale_factor: float = 1, offset_x: float = 0
 
     try:
         G = nx.read_gml(filename)
-        success(f"GML file loaded from {filename} with {len(G.nodes)} nodes.", debug)
+        # success(f"GML file loaded from {filename} with {len(G.nodes)} nodes.", debug)
     except Exception as e:
         error(f"Error loading GML file from {filename}: {e}")
         raise Exception(f"Error loading GML file from {filename}: {e}")

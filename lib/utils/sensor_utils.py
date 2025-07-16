@@ -119,7 +119,7 @@ def extract_sensor_data(state, flag_pos, flag_weight, agent_params):
 
         if current_agent_name and current_agent_pos is not None:
             if current_agent_name not in agent_info:
-                print(f"Adding current agent {current_agent_name} at position {current_agent_pos} to agent info")
+                # print(f"Adding current agent {current_agent_name} at position {current_agent_pos} to agent info")
                 agent_info[current_agent_name] = current_agent_pos
         # print(f"Updated agent info: {agent_info}")
 

@@ -418,8 +418,8 @@ def patch_with_external(G: nx.Graph, P: Set[Any], H: Set[Any], penalty: int, deb
     """
     P_new = set(P)
     attraction_distances = getattr(G, "A_distances", {})
-    print(attraction_distances)
-    print("!!!!!!!!!!!!!")
+    # print(attraction_distances)
+    # print("!!!!!!!!!!!!!")
 
     while True:
         # Check connectivity of current boundary
@@ -443,7 +443,7 @@ def patch_with_external(G: nx.Graph, P: Set[Any], H: Set[Any], penalty: int, deb
                     a_value = attraction_distances.get(a, 0)
                     b_value = attraction_distances.get(b, 0)
                     adjustment = (a_value + b_value) / 2
-                    print(f"Attraction distances: {a_value}, {b_value}, adjustment: {adjustment}")
+                    # print(f"Attraction distances: {a_value}, {b_value}, adjustment: {adjustment}")
                     return penalty + 1 + adjustment * 0.5
                 else:
                     return penalty + 1

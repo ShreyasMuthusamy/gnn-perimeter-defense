@@ -6,7 +6,7 @@ import torch.nn as nn
 from torch.distributions.normal import Normal
 from torch_geometric.data.data import BaseData
 
-from architecture.gnn import GCN
+from lib.architecture.gnn import GCN
 
 class GNNActor(nn.Module):
     def __init__(

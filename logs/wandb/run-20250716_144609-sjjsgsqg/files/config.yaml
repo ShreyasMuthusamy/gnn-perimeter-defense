@@ -1,0 +1,121 @@
+_wandb:
+    value:
+        cli_version: 0.21.0
+        code_path: source-graph-games-main.py
+        e:
+            amaisjncyauztmcavam94k6vabak1zo1:
+                args:
+                    - imitation
+                codePath: main.py
+                codePathLocal: main.py
+                cpu_count: 24
+                cpu_count_logical: 48
+                cudaVersion: "12.8"
+                disk:
+                    /:
+                        total: "982820896768"
+                        used: "814383640576"
+                email: shreyas.muthusamy@gmail.com
+                executable: /home/muthurak/gnn-perimeter-defense/.env/bin/python
+                git:
+                    commit: 98503a35b030d0378945b0664a6497b36da04e49
+                    remote: https://github.com/ShreyasMuthusamy/gnn-perimeter-defense.git
+                gpu: NVIDIA GeForce RTX 3070
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ampere
+                      cudaCores: 5888
+                      memoryTotal: "8589934592"
+                      name: NVIDIA GeForce RTX 3070
+                      uuid: GPU-c054394d-7b6b-074a-59d9-70fd9b26f423
+                host: sa1.alelab
+                memory:
+                    total: "67267477504"
+                os: Linux-6.8.0-60-generic-x86_64-with-glibc2.35
+                program: /home/muthurak/gnn-perimeter-defense/main.py
+                python: CPython 3.11.8
+                root: logs
+                startedAt: "2025-07-16T18:46:09.270496Z"
+                writerId: amaisjncyauztmcavam94k6vabak1zo1
+        m:
+            - "1": trainer/global_step
+              "6":
+                - 3
+              "7": []
+            - "2": '*'
+              "5": 1
+              "6":
+                - 1
+              "7": []
+        python_version: 3.11.8
+        t:
+            "1":
+                - 1
+                - 9
+                - 77
+                - 103
+            "2":
+                - 1
+                - 9
+                - 77
+                - 103
+            "3":
+                - 7
+                - 16
+                - 66
+            "4": 3.11.8
+            "5": 0.21.0
+            "12": 0.21.0
+            "13": linux-x86_64
+activation:
+    value: leaky_relu
+actor_lr:
+    value: 0.0001
+agent_margin:
+    value: 0.05
+agent_radius:
+    value: 0.05
+batch_size:
+    value: 32
+buffer_size:
+    value: 100000
+critic_lr:
+    value: 0.0001
+dropout:
+    value: 0
+field_size:
+    value: 10
+gamma:
+    value: 0.99
+lam:
+    value: 0.9
+log:
+    value: true
+max_epochs:
+    value: 100
+max_steps:
+    value: 200
+mlp_hidden_channels:
+    value: 256
+mlp_per_gnn_layers:
+    value: 0
+mlp_read_layers:
+    value: 1
+n_channels:
+    value: 32
+n_layers:
+    value: 2
+n_trials:
+    value: 10
+notes:
+    value: ""
+operation:
+    value: imitation
+patience:
+    value: 10
+polyak:
+    value: 0.995
+test:
+    value: false
+weight_decay:
+    value: 0

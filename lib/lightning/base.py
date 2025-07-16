@@ -9,7 +9,7 @@ from torch_geometric.loader import DataLoader
 
 import lib.core.time_logger as TLOG
 from lib.utils.rl import ExperienceSourceDataset
-from architecture.rl import GNNActorCritic
+from lib.architecture.rl import GNNActorCritic
 from game import run_game
 
 class LeagueActorCritic(pl.LightningModule):
@@ -77,7 +77,7 @@ class LeagueActorCritic(pl.LightningModule):
         self.rollout_start()
         
         import policies.attacker.V1R1_MSU_Atk as attacker
-        import policies.defender.V1R1_MSU_Def as defender
+        import policies.defender.V1R2_GMU_Def as defender
         
         logger = TLOG.TimeLogger('rollout')
         G, _, _, _, _ = run_game(
@@ -85,7 +85,9 @@ class LeagueActorCritic(pl.LightningModule):
             root_dir=str(root_path),
             attacker_strategy=attacker,
             defender_strategy=defender,
-            logger=logger
+            logger=logger,
+            visualization=False,
+            debug=False
         )
 
         return logger.to_data(G, dtype=self.dtype, device=self.device)

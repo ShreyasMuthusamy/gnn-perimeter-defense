@@ -412,7 +412,7 @@ def generate_single_config(
     if not write_yaml_config(merged_config, output_dir, filename):
         return False, filename
 
-    success(f"Generated configuration: {filename}", debug)
+    # success(f"Generated configuration: {filename}", debug)
     return True, filename
 
 
@@ -560,7 +560,7 @@ def load_configuration(config_name: str, dirs: dict, debug: bool = False) -> dic
         config_dir=dirs["config"],
         debug=debug,
     )
-    success("Read original config file successfully", debug)
+    # success("Read original config file successfully", debug)
 
     # Apply overrides from your rules directory
     config = apply_game_rule_overrides(
@@ -568,7 +568,7 @@ def load_configuration(config_name: str, dirs: dict, debug: bool = False) -> dic
         dirs["rules"],
         debug=debug,
     )
-    success("Applied game rule overrides", debug)
+    # success("Applied game rule overrides", debug)
 
     return config
 
@@ -602,8 +602,8 @@ def create_context_with_sensors(config: dict, G: nx.MultiDiGraph, visualization:
     ctx.sensor.get_sensor("agent").set_owner(None)
 
     # Check the ownership of the agent sensor
-    print(f"Agent sensor ownership: {ctx.sensor.get_sensor('agent')._owner}")
-    print(f"Map sensor ownership: {ctx.sensor.get_sensor('map')._owner}")
-    print(f"Neighbor sensor ownership: {ctx.sensor.get_sensor('neighbor')._owner}")
+    # print(f"Agent sensor ownership: {ctx.sensor.get_sensor('agent')._owner}")
+    # print(f"Map sensor ownership: {ctx.sensor.get_sensor('map')._owner}")
+    # print(f"Neighbor sensor ownership: {ctx.sensor.get_sensor('neighbor')._owner}")
 
     return ctx

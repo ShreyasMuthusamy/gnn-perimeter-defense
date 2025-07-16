@@ -1,0 +1,43 @@
+{
+  "os":  "Linux-6.8.0-60-generic-x86_64-with-glibc2.35",
+  "python":  "CPython 3.11.8",
+  "startedAt":  "2025-07-16T18:38:25.900636Z",
+  "args":  [
+    "imitation"
+  ],
+  "program":  "/home/muthurak/gnn-perimeter-defense/main.py",
+  "codePath":  "main.py",
+  "codePathLocal":  "main.py",
+  "git":  {
+    "remote":  "https://github.com/ShreyasMuthusamy/gnn-perimeter-defense.git",
+    "commit":  "98503a35b030d0378945b0664a6497b36da04e49"
+  },
+  "email":  "shreyas.muthusamy@gmail.com",
+  "root":  "logs",
+  "host":  "sa1.alelab",
+  "executable":  "/home/muthurak/gnn-perimeter-defense/.env/bin/python",
+  "cpu_count":  24,
+  "cpu_count_logical":  48,
+  "gpu":  "NVIDIA GeForce RTX 3070",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "982820896768",
+      "used":  "814382321664"
+    }
+  },
+  "memory":  {
+    "total":  "67267477504"
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA GeForce RTX 3070",
+      "memoryTotal":  "8589934592",
+      "cudaCores":  5888,
+      "architecture":  "Ampere",
+      "uuid":  "GPU-c054394d-7b6b-074a-59d9-70fd9b26f423"
+    }
+  ],
+  "cudaVersion":  "12.8",
+  "writerId":  "pvblgjtgdbaxx3qm0hrqp89f3le4ebu3"
+}
